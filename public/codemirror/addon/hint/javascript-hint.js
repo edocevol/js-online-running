@@ -142,7 +142,7 @@
 
         //这里是处理没有任何字母输入时也会有代码提示的原因。
         if (token.string == "") {
-            return {};
+            return {list:{}};
         }
         var found = [], start = token.string, global = options && options.globalScope || window;
 
@@ -154,7 +154,7 @@
             if (typeof obj == "string") forEach(stringProps, maybeAdd);
             else if (obj instanceof Array) forEach(arrayProps, maybeAdd);
             else if (obj instanceof Function) forEach(funcProps, maybeAdd);
-            forEach(ukeys,maybeAdd);
+            forEach(ukeys,maybeAdd);//匹配我们传进来的用户输入的代码中的所有的单词
             forAllProps(obj, maybeAdd)
         }
 
