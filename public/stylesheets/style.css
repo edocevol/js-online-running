@@ -1,0 +1,16 @@
+body {
+  padding: 20px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.mt20{
+  margin-top: 20px;
+}
+.mt10 {
+
+  margin-top:10px;
+}

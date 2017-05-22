@@ -1,0 +1,233 @@
+<link rel="stylesheet" href="/codemirror/lib/codemirror.css">
+<link rel="stylesheet" href="/codemirror/theme/monokai.css">
+<link rel="stylesheet" href="/codemirror/addon/hint/show-hint.css"/>
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+
+<script src="/bootstrap/js/bootstrap.js"></script>
+<!--bootstrap的tree插件，用来显示异常信息，我觉得非常合适-->
+<script src="/javascripts/bootstrap-treeview.js"></script>
+<div class="container">
+    <h1>
+        {{title}}
+        <small class="tips">(POWERED BY <a href="https://github.com/sixtrees">sixtrees</a>)</small>
+    </h1>
+    <div class="progress">
+        <div class="progress-bar progress-bar-success" role="progressbar"
+             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+             style="width: 90%;">
+            <span class="sr-only">90% 完成（成功）</span>
+        </div>
+    </div>
+
+
+    <textarea id="code"></textarea>
+
+
+    <div class="mt20"></div>
+    <button onclick="getExpress()" style="width:200px;" class="btn btn-info">执行</button>
+    <button onclick="clearCode()" style="width: 200px;" class="btn btn-danger">清空编辑区</button>
+    <div class="mt20"></div>
+    <div class="panel panel-success pull-left" style="width:50%;height: 370px;">
+        <div class="panel-heading">
+            <h3 class="panel-title">输出控制台</h3>
+        </div>
+        <div class="panel-body">
+            <textarea id="output"></textarea>
+        </div>
+    </div>
+
+    <div class="panel panel-danger pull-right" style="width:50%;height: 370px;">
+        <div class="panel-heading">
+            <h3 class="panel-title">错误控制台</h3>
+        </div>
+        <div class="panel-body">
+            <div id="error" class="">
+            </div>
+        </div>
+    </div>
+
+    <!-- Create a simple CodeMirror instance #begin-->
+
+    <script src="/codemirror/lib/codemirror.js"></script>
+    <script src="/codemirror/mode/javascript/javascript.js"></script>
+    <script src="/codemirror/addon/selection/active-line.js"></script>
+    <script src="/codemirror/addon/edit/matchbrackets.js"></script>
+    <script src="/codemirror/addon/hint/show-hint.js"></script>
+    <script src="/codemirror/addon/hint/javascript-hint.js"></script>
+    <style>
+        .CodeMirror {
+            font-family: "Consolas", "Arial", "微软雅黑";
+            font-size: 20px;
+        }
+    </style>
+
+    <script type="text/javascript" src="codemirror/addon/selection/active-line.js"></script>
+    <script type="text/javascript" src="codemirror/addon/edit/matchbrackets.js"></script>
+    <script type="text/javascript" src="codemirror/addon/display/fullscreen.js"></script>
+    <script>
+
+        var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            lineNumbers: true,
+            styleActiveLine: true,
+            matchBrackets: true,
+            theme: "monokai",
+            mode: "text/javascript",
+            indentWithTabs: true,
+            autofocus: true,
+            matchBrackets: true,
+            lineWrapping: true,
+            completeSingle: false,
+            extraKeys: {
+                "Ctrl-Q": "autocomplete"
+            }, //
+        });
+
+        var output_editor = CodeMirror.fromTextArea(document.getElementById("output"), {
+            lineNumbers: true,
+            readOnly: true,
+            theme: "monokai",
+            mode: "text/javascript",
+            lineWrapping: true
+        });
+        editor.setOption("extraKeys", {
+            // Tab键换成4个空格
+            Tab: function (cm) {
+                var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
+                cm.replaceSelection(spaces);
+            },
+            // F11键切换全屏
+            "F11": function (cm) {
+                cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+            },
+            // Esc键退出全屏
+            "Esc": function (cm) {
+                if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+            }
+        });
+
+        /**
+         * 用来实时对用户的输入进行提示
+         */
+        editor.on("cursorActivity", function () {
+            //获取用户当前的编辑器中的编写的代码
+            var words = editor.getValue() + "";
+            //利用正则取出用户输入的所有的英文的字母
+            words = words.replace(/[a-z]+[\-|\']+[a-z]+/ig, '').match(/([a-z]+)/ig);
+            //将获取到的用户的单词传入CodeMirror,并在javascript-hint中做匹配
+            CodeMirror.ukeys = words;
+            //调用显示提示
+            editor.showHint();
+        });
+
+        //定义一个全局变量，用来显示用户当前运行的结果
+        window.res = "";
+        console.oldLog = console.log;
+        console.log = function (str) {
+            console.oldLog(str);
+            window.res += str + "\r\n";
+        };
+
+        var getTabByNum = function (num) {
+            var cal = "";
+            for (var j = 0; j < num; j++) {
+                for (var i = 0; i < 8; i++) {
+                    cal += "&nbsp;";
+                }
+            }
+            return cal;
+        }
+        var getExpress = function () {
+            output_editor.setValue("");
+            document.getElementById("error").innerHTML = "";
+            window.res = "";
+            var exp = editor.getValue();
+            var res2 = "";
+            try {
+                var res2 = eval(exp);
+                //获取执行的结果
+                if (res2 !== undefined) {
+                    window.res += res2 + "\r\n";
+                } else {
+                    if (res2 === "") {
+                        //如果没有任何输出，包括控制台输出的话，输出这句话。
+                        window.res += "undefined" + "\r\n";
+                    }
+                }
+            } catch (ex) {
+                //处理异常事件
+                var tree = [
+                    {
+                        text: "Catch Error",
+                        nodes: [
+                            {
+                                text: "Error message",
+                                nodes: [
+                                    {
+                                        text: ex.message,
+                                        color: "#ff0000"
+                                    }
+                                ]
+                            }, {
+                                text: "Error stack",
+                                nodes: [
+                                    {
+                                        text: ex.stack,
+                                        color: "#ff0000"
+                                    }
+                                ]
+                            }, {
+                                text: "Error linenum",
+                                nodes: [
+                                    {
+                                        text: ex.lineNumber,
+                                        color: "#ff0000"
+                                    }
+                                ]
+                            },
+                            {
+                                text: "Error name",
+                                nodes: [
+                                    {
+                                        text: ex.name,
+                                        color: "#ff0000"
+                                    }
+                                ]
+                            },
+                            {
+                                text: "异常帮助",
+                                nodes: [
+                                    {
+                                        text: "EvalError：eval()的使用与定义不一致",
+                                        color: "#009926"
+                                    }, {
+                                        text: "RangeError：数值越界",
+                                        color: "#009926"
+                                    }, {
+                                        text: "ReferenceError：非法或不能识别的引用数值",
+                                        color: "#009926"
+                                    }, {
+                                        text: "SyntaxError：发生语法解析错误",
+                                        color: "#009926"
+                                    }, {
+                                        text: "TypeError：操作数类型错误",
+                                        color: "#009926"
+                                    }, {
+                                        text: "URIError：URI处理函数使用不当",
+                                        color: "#009926"
+                                    }
+                                ]
+                            }
+                        ]
+
+                    }
+                ];
+                $('#error').treeview({data: tree});
+            }//end of handle exception
+            output_editor.setValue(window.res);//显示js语句执行结果
+        }
+
+        var clearCode = function () {
+            editor.setValue("");
+        }
+    </script>
+</div>
