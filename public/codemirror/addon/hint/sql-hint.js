@@ -70,6 +70,7 @@
         var sub = getText(word).substr(0, len);
         return string.toUpperCase() === sub.toUpperCase();
     }
+	
 
     function addMatches(result, search, wordlist, formatter) {
         if (isArray(wordlist)) {
