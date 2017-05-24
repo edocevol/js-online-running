@@ -2,6 +2,13 @@
 # nodejs+express搭建javascript在线IDE
 ## 演示地址
 [http://wanqing520.cn:10086/](http://wanqing520.cn:10086/)
+
+## node项目后台启动
+```
+npm install forever -g
+forever start bin/www
+```
+
 ## 项目地址
 github:[https://github.com/sixtrees/js-online-running][1]
 ## 背景
