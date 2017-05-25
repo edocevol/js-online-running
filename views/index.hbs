@@ -19,6 +19,7 @@
         {{title}}
         <small class="tips">(POWERED BY <a href="https://github.com/sixtrees">sixtrees</a>)
         </small>
+        <small id="runCount" style="font-size: 14px;" class="text-success glyphicon glyphicon-play "></small>
         <span class="pull-right">
              <svg aria-hidden="true" class="octicon octicon-mark-github" height="32" version="1.1" viewBox="0 0 16 16"
                   width="32">
@@ -27,7 +28,7 @@
             </svg>
         </span>
         <span class="pull-right" style="">
-                <svg xmlns="http://www.w3.org/2000/svg" version="1.1"  height="32" width="113"
+                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="32" width="113"
                      xmlns:xlink="http://www.w3.org/1999/xlink">
                   <a xlink:href="http://es6.ruanyifeng.com/" style="font-size: 12px;" target="_blank">
                     <text x="0" y="22" fill="red">GO TO LEARN ES6</text>
@@ -273,10 +274,18 @@
             }//end of handle exception
 
             $("#output").val(window.res);//显示js语句执行结果
+            $.ajax({url: 'addCount'});
         }
 
         var clearCode = function () {
             editor.setValue("");
         }
+
+        $.ajax({
+           url:'getCount',
+            success:function (data) {
+                $('#runCount').html("累计服务:<code>"+data.code+"</code>次");
+            }
+        });
     </script>
 </div>
