@@ -54,3 +54,18 @@ function time_round(time) {
     return time;
 }
 
+/**
+ * 生成指定数量的TAB,这里的TAB是用TAB来代替的
+ * @param num
+ * @returns {string}
+ */
+var getTabByNum = function (num) {
+    var cal = "";
+    for (var j = 0; j < num; j++) {
+        for (var i = 0; i < 4; i++) {
+            cal += "&nbsp;";
+        }
+    }
+    return cal;
+};
+
