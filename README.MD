@@ -1,7 +1,7 @@
 
 # nodejs+express搭建javascript在线IDE
 ## 演示地址
-[http://wanqing520.cn:10086/](http://wanqing520.cn:10086/)
+[http://js.wanqing520.cn/](http://js.wanqing520.cn/)
 
 ## node项目后台启动
 ```
