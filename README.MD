@@ -1,16 +1,13 @@
 
+---
+title: js在线学习平台的介绍及安装
+---
+
 # nodejs+express搭建javascript在线IDE
-## 演示地址
-[http://js.wanqing520.cn/](http://js.wanqing520.cn/)
-
-## node项目后台启动
-```
-npm install forever -g
-forever start bin/www
-```
-
 ## 项目地址
-github:[https://github.com/sixtrees/js-online-running][1]
+github:[https://github.com/edocevol/js-online-running][1]
+demo:~~[http://wanqing520.cn:10086/](http://wanqing520.cn:10086/)~~ 
+
 ## 背景
 这两天在看阮一峰的《ES6标准入门》，对其中涉及到的代码示例部分，感觉到很不方便，不知道阮老师是如何进行代码调试的。可能是在nodejs环境或者直接在浏览器的控制台中进行调试。我每次都是在nodejs命令行中进行代码编写，由于命令行本身的特点，有一句代码编写错误，都可能导致需要重写所有的代码。
 
@@ -54,7 +51,7 @@ $ cd
 $ cd d:/nodejs
 $ pwd
 /d/nodejs
-$ git clone https://github.com/sixtrees/js-online-running.git
+$ git clone https://github.com/edocevol/js-online-running.git
 ```
 ![enter description here][8]
 
@@ -131,10 +128,10 @@ for(var item of a) {
         if (token.string == "") {
             return {list:{}};;
         }
-		...
+        ...     
 }
 ```
-### 问题2
+### 问题2 
 另外一个问题就是`CodeMirror`能提供的`auto-complete(代码自动完成)`是需要进行按键绑定的，用户通过某个按键组合才能触发`autocomplete`事件，这对于我们写代码的速度肯定影响是很大。因此，我们希望在我们输入字符的同时，界面可以给出我们实时的代码提示，而不需要进行按键组合来触发。一般网上的示例都是比较坑爹的，代码示例如下：
 ```javascript?linenums
 editor.on("change", function () {
@@ -164,14 +161,14 @@ editor.on("cursorActivity", function () {
  * 用来实时对用户的输入进行提示
  */
 editor.on("cursorActivity", function () {
-	//获取用户当前的编辑器中的编写的代码
-	var words = editor.getValue() + "";
-	//利用正则取出用户输入的所有的英文的字母
-	words = words.replace(/[a-z]+[\-|\']+[a-z]+/ig, '').match(/([a-z]+)/ig);
-	//将获取到的用户的单词传入CodeMirror,并在javascript-hint中做匹配
-	CodeMirror.ukeys = words;
-	//调用显示提示
-	editor.showHint();
+    //获取用户当前的编辑器中的编写的代码
+    var words = editor.getValue() + "";
+    //利用正则取出用户输入的所有的英文的字母
+    words = words.replace(/[a-z]+[\-|\']+[a-z]+/ig, '').match(/([a-z]+)/ig);
+    //将获取到的用户的单词传入CodeMirror,并在javascript-hint中做匹配
+    CodeMirror.ukeys = words;
+    //调用显示提示
+    editor.showHint();
 });
 
 ```
@@ -311,7 +308,7 @@ editor.on("cursorActivity", function () {
 
 ## 附赠的福利
 CodeMirror还提供了`sql`的代码提示的附加功能。主要针对的有`MSSQL`、`mysql`、`mariadb`以及`PLSQL`。本文以一个实际的项目中的实际使用来演示如何按照上文的描述来修改对应的`sql-hint.js`中的内容来完成：
-1. 取消没有输入任何有效字符时的代码提示问题
+1. 取消没有输入任何有效字符时的代码提示问题 
 2. 用`cursorActivity`设置代码实时提示
 3. 增加表的字段到代码提示中去。
 
@@ -320,7 +317,7 @@ sql对应的关键字信息在`CodeMirror/mode/sql/sql.js`中，我在项目中�
 
 ![enter description here][20]
 
-然后修改`CodeMirror/addon/hint/sql-hint.js`中的``` CodeMirror.registerHelper("hint", "sql", function (editor, options) {```函数中添加如下图所示的代码，同样是判断`token`是否`==""`.
+然后修改`CodeMirror/addon/hint/sql-hint.js`中的```CodeMirror.registerHelper("hint", "sql", function (editor, options) {```函数中添加如下图所示的代码，同样是判断`token`是否`==""`.
 ![enter description here][21]
 
 ## 问题2及问题3
@@ -358,27 +355,27 @@ sql对应的关键字信息在`CodeMirror/mode/sql/sql.js`中，我在项目中�
 ![enter description here][24]
 
 
-  [1]: https://github.com/sixtrees/js-online-running
-  [2]: http://ojcybdsyq.bkt.clouddn.com/1495451166258.jpg "1495451166258"
-  [3]: http://ojcybdsyq.bkt.clouddn.com/1495451538553.jpg "1495451538553"
-  [4]: http://ojcybdsyq.bkt.clouddn.com/1495450964467.jpg "1495450964467"
-  [5]: https://github.com/sixtrees/js-online-running.git
-  [6]: http://ojcybdsyq.bkt.clouddn.com/1495452002298.jpg "1495452002298"
+  [1]: https://github.com/edocevol/js-online-running
+  [2]: http://cdnfrank.wanqing520.cn/1495451166258.jpg "1495451166258"
+  [3]: http://cdnfrank.wanqing520.cn/1495451538553.jpg "1495451538553"
+  [4]: http://cdnfrank.wanqing520.cn/1495450964467.jpg "1495450964467"
+  [5]: https://github.com/edocevol/js-online-running.git
+  [6]: http://cdnfrank.wanqing520.cn/1495452002298.jpg "1495452002298"
   [7]: http://cmder.net/
-  [8]: http://ojcybdsyq.bkt.clouddn.com/1495452621375.jpg "1495452621375"
-  [9]: http://ojcybdsyq.bkt.clouddn.com/1495452660091.jpg "1495452660091"
-  [10]: http://ojcybdsyq.bkt.clouddn.com/1495452792570.jpg "1495452792570"
-  [11]: http://ojcybdsyq.bkt.clouddn.com/1495453131157.jpg "1495453131157"
-  [12]: http://ojcybdsyq.bkt.clouddn.com/1495453322744.jpg "1495453322744"
-  [13]: http://ojcybdsyq.bkt.clouddn.com/1495453368083.jpg "1495453368083"
+  [8]: http://cdnfrank.wanqing520.cn/1495452621375.jpg "1495452621375"
+  [9]: http://cdnfrank.wanqing520.cn/1495452660091.jpg "1495452660091"
+  [10]: http://cdnfrank.wanqing520.cn/1495452792570.jpg "1495452792570"
+  [11]: http://cdnfrank.wanqing520.cn/1495453131157.jpg "1495453131157"
+  [12]: http://cdnfrank.wanqing520.cn/1495453322744.jpg "1495453322744"
+  [13]: http://cdnfrank.wanqing520.cn/1495453368083.jpg "1495453368083"
   [14]: http://es6.ruanyifeng.com/#docs/set-map
-  [15]: http://ojcybdsyq.bkt.clouddn.com/%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%BC%94%E7%A4%BA.gif "一个简单的演示"
-  [16]: http://ojcybdsyq.bkt.clouddn.com/1495456159072.jpg "1495456159072"
-  [17]: http://ojcybdsyq.bkt.clouddn.com/GIF2.gif "GIF2"
-  [18]: https://github.com/sixtrees/js-online-running.git
-  [19]: https://github.com/sixtrees/js-online-running/blob/master/public/codemirror/mode/sql/sql.js
-  [20]: http://ojcybdsyq.bkt.clouddn.com/1495459098757.jpg "1495459098757"
-  [21]: http://ojcybdsyq.bkt.clouddn.com/1495459235620.jpg "1495459235620"
-  [22]: http://ojcybdsyq.bkt.clouddn.com/1495459728750.jpg "1495459728750"
-  [23]: https://github.com/sixtrees/js-online-running
-  [24]: http://ojcybdsyq.bkt.clouddn.com/GIF3.gif "GIF3"
+  [15]: http://cdnfrank.wanqing520.cn/%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%BC%94%E7%A4%BA.gif "一个简单的演示"
+  [16]: http://cdnfrank.wanqing520.cn/1495456159072.jpg "1495456159072"
+  [17]: http://cdnfrank.wanqing520.cn/GIF2.gif "GIF2"
+  [18]: https://github.com/edocevol/js-online-running.git
+  [19]: https://github.com/edocevol/js-online-running/blob/master/public/codemirror/mode/sql/sql.js
+  [20]: http://cdnfrank.wanqing520.cn/1495459098757.jpg "1495459098757"
+  [21]: http://cdnfrank.wanqing520.cn/1495459235620.jpg "1495459235620"
+  [22]: http://cdnfrank.wanqing520.cn/1495459728750.jpg "1495459728750"
+  [23]: https://github.com/edocevol/js-online-running
+  [24]: http://cdnfrank.wanqing520.cn/GIF3.gif "GIF3"
